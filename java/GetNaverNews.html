@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	a { text-decoration : none;
+		color : blue;
+		}
+	a:hover { text-decoration : nonel;
+		color : red;
+		}
+	#paging a { display : inline-block;
+	 	width : 
+	 	}
+	.box { border 	: 1px solid blue;
+		margin 		: 20px;
+		padding 	: 10px;
+		border-radius : 10px;
+	}
+	img {
+		height : 200px;
+		width  : 200px;
+	}
+	.btnprevnext {
+		height : 15px;
+		width  : 15px;
+	}
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+	function display( data, opt ) {
+		switch ( opt ) {
+		case 'xml' :
+			alert(data);
+			break;
+
+		case 'json' :
+			var items = data.items;
+			$.each(items, function (){
+				var title 		= this.title;
+				var link 		= this.link;
+				var description = this.description;
+				var pubDate 	= this.pubDate;
+				
+				html += '<div class="box">';
+				html += '<h2>';
+				html += '<a target="_blank" href="' + link + '">';
+				html += title;				
+				html += '</a>';				
+				html += '</h2>';
+				html += '<p>';
+				html += pubDate;
+				html += '</p>';
+				html += '<p>';
+				html += description;
+				html += '</p>';
+				html += '</div>';
+			});
+			
+			$('#div1').html(html);
+			break;
+		}
+	}
+			
+	function display_paging(total, countPerPage) {
+		var html 		= '';
+		var lastPageNo  = Math.ceil( total / countPerPage );
+		for (i = 1; i <= lastPageNo; i++) {	
+			html += '<a href="#" id="btnSearchA">'+ i +'</a>';
+		}
+		$('#paging').html(html);
+		
+	}
+			
+	$(function() {
+		$('#btnSearch').on('click',function(){
+			$.ajax({ 
+				url 	: 'http://localhost:9090/NaverAPI/getnews',
+				data 	: {
+          keyword : $('#keyword').val(),
+					currentPage : $('#currentPage').val()
+				},
+				success : function(data){
+					var total 		 = data.total; 
+					var countPerPage = 10;
+					display_paging(total, countPerPage);
+					display(data, "json");
+				},
+				error	: function(xhr){
+					alert(xhr.status + ', '+ xhr.statusText);
+				}
+			});
+		});
+
+		$('#paging').on('click', '#btnSearchA', function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			
+			var currentPage =  e.target.innerHTML;
+			$.ajax({
+				url 	:  'http://localhost:9090/NaverAPI/getnews',
+				data 	: { 
+					keyword 	 : $('#keyword').val(),
+					currentPage  : currentPage,
+					countPerPage : 10 
+				},
+				success : function(data){
+					var total 		 = data.total;
+					var countPerPage = 10;
+					display_paging(total, countPerPage);
+					display(data, "json");
+				},
+				error	: function(xhr){
+					alert(xhr.status + ', '+ xhr.statusText);
+				}
+			});
+
+		});
+		
+		var curPage = 1;
+
+		$('#paging2 a').on('click', function(e){
+			switch(e.target.id){
+			case 'imgprev':
+				if(curPage >= 2) //if it's not the first page
+					curPage = curPage - 1; //go to the prev page
+				else    //if it's the first page
+					curPage = 1; //remain in the first page
+				break;
+			case 'imgnext':
+				if(curPage < totalPage) //if it's not the last page
+					curPage = curPage + 1; //go to the next page
+				else    //if it's the last page
+					curPage = totalPage; //remain in the last page
+				break;
+			}
+			$.ajax({
+				url 	:  'http://localhost:9090/NaverAPI/getnews',
+				data 	: {
+					keyword 	 : $('#keyword').val(),
+					currentPage  : curPage,
+					countPerPage : 10 
+				},
+				success : function(data){
+					var total 		 = data.total;
+					var countPerPage = 10;
+					display_paging(total, countPerPage);
+					display(data, "json");
+				},
+				error	: function(xhr){
+					alert(xhr.status + ', '+ xhr.statusText);
+				}
+			});
+			
+			
+		});
+
+	});
+</script>
+</head>
+<body>
+	<img src="pic.jpg" />
+	<hr>
+	<input type="text" id="keyword" placeholder="검색어" value="에이스테크 주총"/>
+	<button id="btnSearch"> 검색 </button> //search button
+
+	페이지번호 <input type="text" id="currentPage" value="1"/>
+	<div id="paging"></div>
+
+	<div id="paging2">
+	<a href="#" id="btn_prev" >
+	<img src="images/btn-prev.png"  class="btnprevnext" id="imgprev"/>
+	</a>
+	<a href="#" id="btn_next" >
+	<img src="images/btn-next.png" class="btnprevnext" id="imgnext"/>
+	</a>
+	</div> //buttons for previous page and next page in this div
+
+	<hr>
+	<div id="div1"></div> //news list in this div
+</body>
+</html>

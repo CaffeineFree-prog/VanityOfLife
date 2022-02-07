@@ -1,0 +1,22 @@
+
+		
+		// 임시세션처리
+		HttpSession sessionInfo = req.getSession(false);
+		if (sessionInfo != null) sessionInfo.invalidate();
+		sessionInfo = req.getSession(true);
+		IntegrateUsersVO tmpIntegrateUsersVO = new IntegrateUsersVO();
+		tmpIntegrateUsersVO.setUserNo("0000");
+		tmpIntegrateUsersVO.setUserId("uoo1111");
+		IntegrateUsersVO integrateUsersVO = integrateUsersService.getIntegrateUsers(tmpIntegrateUsersVO);
+		IntegrateUsersVO insertVO = new IntegrateUsersVO();
+		insertVO.setUserNo(integrateUsersVO.getUserNo());
+		insertVO.setUserId(integrateUsersVO.getUserId());
+		req.getSession().setAttribute("integrateUserInfo", insertVO);
+		UserLoginVO loginVO = new UserLoginVO();
+		loginVO.setUserId(integrateUsersVO.getUserId());
+		loginVO.setUserNm(integrateUsersVO.getUserNm());
+		LoginManager loginManager = LoginManager.getInstance();
+		loginManager.setUserSession(sessionInfo, loginVO);
+		
+		
+		

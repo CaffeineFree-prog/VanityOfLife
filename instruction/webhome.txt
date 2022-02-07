@@ -1,0 +1,25 @@
+webhome 찾기
+
+(1) Putty - cmd - root
+ ps -ef | grep java
+
+(2) cd /urs/share/tomcat
+ ls -l
+ web 홈디렉토리 / 콘프디렉토리 찾기 cd conf/
+
+(3) cd Catalina
+ ls -l
+ cd www.dae~
+ cat ROOT.xml (파일열어봄)
+
+(4) docBase 찾아서
+ cd /home/ssss/
+
+ (Catalina에 로컬호스트만 있으면
+ conf 안에 server.xml)
+
+(5) cd webhome/
+ pwd
+ /home/ssss/webapp
+ cd webapps/ 열고
+ pwd 현재경로봄

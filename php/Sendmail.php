@@ -17,9 +17,9 @@ class Sendmail {
     /* smtp 의 호스트 설정 : 아래는 gmail 일경우 */
     var $host="ssl://smtp.gmail.com";
 	/* smtp 계정 아이디 입력 */
-    var $smtp_id="";
+    var $smtp_id="investinvest500@gmail.com";
     /* smtp 계정 비밀번호 입력 */
-	var $smtp_pw="";
+	var $smtp_pw="invest!500";
 	
     /* 디버그모드 - 활성 :1, 비활성 : 0; */
     var $debug = 1; 
@@ -164,14 +164,15 @@ class Sendmail {
     }
 	
     /* 첨부파일이 있을 경우 이 함수를 이용해 파일을 첨부한다. */
-    function attach($path, $name="", $ctype="application/octet-stream") {
+    function attach($path, $name, $ctype="application/octet-stream") {
         if(is_file($path)) {
             $fp = fopen($path, "r");
             $message = fread($fp, filesize($path));
             fclose($fp);
+			$name = iconv('utf-8', 'EUC-KR', $name);
             $this->parts[] = array ("ctype" => $ctype, "message" => $message, "name" => $name);
 			
-			//print_r("-----첨부파일있음-----".$path);
+			//print_r("-----첨부파일있음-----".$name);
 			
         } else {
         	//print_r("-----첨부파일없음-----".$path);
@@ -181,7 +182,7 @@ class Sendmail {
      /*  Multipart 메시지를 생성시킨다. */
     function build_message($part) {
         $msg = "Content-Type: ".$part['ctype'];
-        if($part['name']) $msg .= "; name=\"".$part['name']."\"";
+        if($part['name']) $msg .= "; name=".$part['name']."\"";
         $msg .= "\r\nContent-Transfer-Encoding: base64\r\n";
         $msg .= "Content-Disposition: attachment; filename=\"".$part['name']."\"\r\n\r\n";
         $msg .= chunk_split(base64_encode($part['message']));
@@ -192,6 +193,7 @@ class Sendmail {
     function build_data($subject, $body) {
         $boundary = $this->get_boundary();
         $attcnt = sizeof($this->parts);
+		$subject = iconv('utf-8', 'EUC-KR', $subject);
         $mime= "Subject: ".$subject."\r\n";
         $mime .= "Date: ".date ("D, j M Y H:i:s T",time())."\r\n";
         $mime .= "MIME-Version: 1.0\r\n";

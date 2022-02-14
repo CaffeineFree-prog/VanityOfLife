@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/storyCms/common/jsp/taglib.jsp" %>
-<jsp:useBean id="now" class="java.util.Date" />
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today"/>
+<fmt:formatDate value="${now}" pattern="HH:mm" var="hm"/>
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd HH:mm" var="todayHm"/>
+<fmt:formatDate value="${now}" pattern="yyyy" var="year"/>
+<fmt:formatDate value="${now}" pattern="MM" var="month"/>
+<fmt:formatDate value="${now}" pattern="dd" var="day"/>
+<fmt:formatDate value="${now}" pattern="HH:mm:ss" var="hms"/>
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd HH:mm:ss" var="todayHms"/>
 <%
     /*
      * @File Name : list.jsp

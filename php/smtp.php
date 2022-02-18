@@ -15,7 +15,7 @@ include($_DIR['common'] ."/head.php");
 		return $dbObj->query($sql);
 	}
 	
-	$sql = mq("SELECT * FROM CB_EMAIL");
+	$sql = mq("SELECT * FROM EMAIL");
 	//print_r($sql);
 	//exit; 
 	

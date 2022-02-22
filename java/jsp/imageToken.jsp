@@ -5,7 +5,7 @@
 		<c:if test="${status.last}">
 			<c:choose>
 				<c:when test="${token eq 'png' || token eq 'gif' || token eq 'jpg' || token eq 'jpeg' || token eq 'bmp'}">
-					<img src="/storyCms1/getImage.do?atchFileId=<c:out value='${fileVO.atchFileId}'/>&amp;fileSn=<c:out value='${fileVO.fileSn}'/>" alt="<c:out value='${fileVO.orignlFileNm}'/>" onerror='this.src="${pageContext.request.contextPath}/storyCms/bbs/images/icon/icon_file.gif"' style="width:100%;">
+					<img src="/getImage.do?atchFileId=<c:out value='${fileVO.atchFileId}'/>&amp;fileSn=<c:out value='${fileVO.fileSn}'/>" alt="<c:out value='${fileVO.orignlFileNm}'/>" onerror='this.src="${pageContext.request.contextPath}/icon_file.gif"' style="width:100%;">
 				</c:when>
 				<c:otherwise>
 				</c:otherwise>
